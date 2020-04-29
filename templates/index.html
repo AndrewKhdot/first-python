@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HI</title>
+    <script type=text/javascript src="{{ url_for('static', filename='jquery-3.5.0.min.js') }}"></script>
+</head>
+<body>
+ <script>
+        function add_message() {
+            $.ajax({
+                type: "POST",
+                url: "/add_message",
+                data: $('form').serialize(),
+                type: 'POST',
+                success: function(response) {
+                    var json = jQuery.parseJSON(response)
+                    $('#mess').html(json.mess)
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+    </script>
+<h1>Messages List</h1>
+{% for message in messages %}
+<div>{{message.time}}  {{message.text}}</div>
+{% endfor %}
+<h2>Message</h2>
+<form action="/add_message" method="post" name="form">
+    <input type="text" name="text">
+    <input type="button" value="Отправить" onclick="add_message();">
+</form>
+<div id="mess"></div>
+
+</body>
+</html>
